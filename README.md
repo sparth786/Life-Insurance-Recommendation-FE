@@ -2,6 +2,9 @@
 
 A modern, responsive Next.js 15 application for life insurance recommendations. Users can register, log in, and receive personalized insurance suggestions based on their profile.
 
+## 🌐 Live Demo
+- **Frontend Application**: https://life-insurance-recommendation-fe.vercel.app/
+
 ## Features
 - JWT authentication (login/register)
 - Personalized insurance recommendation form
