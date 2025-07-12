@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Life Insurance Recommendation Frontend
+
+A modern, responsive Next.js 15 application for life insurance recommendations. Users can register, log in, and receive personalized insurance suggestions based on their profile.
+
+## Features
+- JWT authentication (login/register)
+- Personalized insurance recommendation form
+- User dashboard and history
+- Protected routes with middleware
+- Responsive, accessible UI (Tailwind CSS)
+- TypeScript for type safety
 
 ## Getting Started
 
-First, run the development server:
-
+### 1. Install dependencies
 ```bash
-npm run dev
+npm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set environment variables
+Create a `.env.local` file in the root:
+```
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+Adjust the URL to match your backend API.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run the development server
+```bash
+npm run dev
+```
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Build for production
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Linting & Formatting
+Run ESLint to check code quality:
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
+- `src/components/` – UI components (forms, header, etc.)
+- `src/contexts/` – React context for authentication
+- `src/services/` – API service layer
+- `src/types/` – TypeScript types
+- `src/app/` – Next.js app directory (pages, layouts)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints (Expected by Frontend)
+- `POST /auth/login` – User login
+- `POST /auth/register` – User registration
+- `POST /recommendation` – Generate recommendation
+- `GET /recommendation/history` – User's recommendation history
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
+This app is ready for deployment on Vercel, Docker, or any Node.js hosting.
 
-## Deploy on Vercel
+### Docker
+Build and run with Docker:
+```bash
+docker build -t life-insurance-fe .
+docker run -p 3000:3000 life-insurance-fe
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**For questions or contributions, please open an issue or pull request.**

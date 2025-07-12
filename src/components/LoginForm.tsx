@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { authApi } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 
 const schema = yup
   .object({
@@ -30,6 +31,7 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const {
     register,
@@ -46,10 +48,12 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
     try {
       const response = await authApi.login(data);
       login(response);
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      const msg =
+        error.response?.data?.message || "Login failed. Please try again.";
+      setError(msg);
+      showToast(msg, "error");
     } finally {
       setLoading(false);
     }
@@ -60,13 +64,18 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Welcome Back
-            </h2>
+            </h1>
             <p className="text-gray-600">Sign in to your account</p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-8 space-y-6"
+            aria-label="Login form"
+            noValidate
+          >
             <div>
               <label
                 htmlFor="email"
@@ -78,15 +87,24 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
                 {...register("email")}
                 type="email"
                 id="email"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                name="email"
+                autoComplete="email"
+                aria-describedby={errors.email ? "email-error" : undefined}
+                aria-invalid={errors.email ? "true" : "false"}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   errors.email
-                    ? "border-red-300 focus:ring-red-500"
+                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                     : "border-gray-300"
                 }`}
                 placeholder="Enter your email"
+                disabled={loading}
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
+                <p
+                  id="email-error"
+                  className="mt-1 text-sm text-red-600"
+                  role="alert"
+                >
                   {errors.email.message}
                 </p>
               )}
@@ -103,22 +121,37 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
                 {...register("password")}
                 type="password"
                 id="password"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                name="password"
+                autoComplete="current-password"
+                aria-describedby={
+                  errors.password ? "password-error" : undefined
+                }
+                aria-invalid={errors.password ? "true" : "false"}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   errors.password
-                    ? "border-red-300 focus:ring-red-500"
+                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                     : "border-gray-300"
                 }`}
                 placeholder="Enter your password"
+                disabled={loading}
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
+                <p
+                  id="password-error"
+                  className="mt-1 text-sm text-red-600"
+                  role="alert"
+                >
                   {errors.password.message}
                 </p>
               )}
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div
+                className="p-4 bg-red-50 border border-red-200 rounded-lg"
+                role="alert"
+                aria-live="polite"
+              >
                 <p className="text-sm text-red-800">{error}</p>
               </div>
             )}
@@ -126,18 +159,24 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
             <button
               type="submit"
               disabled={loading}
+              aria-describedby={loading ? "loading-description" : undefined}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium shadow-md hover:shadow-lg"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
+            {loading && (
+              <p id="loading-description" className="sr-only">
+                Please wait while we sign you in
+              </p>
+            )}
 
             <div className="text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <button
                   type="button"
                   onClick={onSwitchToRegister}
-                  className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                  className="text-blue-600 hover:text-blue-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                 >
                   Sign up
                 </button>

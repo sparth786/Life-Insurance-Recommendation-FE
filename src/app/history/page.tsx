@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { insuranceApi } from "../../services/api";
 import Header from "../../components/Header";
 import { UserSubmissionWithId } from "../../types/insurance";
 import Link from "next/link";
 
 export default function HistoryPage() {
-  const { user, logout } = useAuth();
   const [history, setHistory] = useState<UserSubmissionWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,8 +92,8 @@ export default function HistoryPage() {
                 No Recommendations Yet
               </h3>
               <p className="text-gray-600 mb-6">
-                You haven't generated any recommendations yet. Get started with
-                your first recommendation!
+                You haven&apos;t generated any recommendations yet. Get started
+                with your first recommendation!
               </p>
               <Link
                 href="/recommendation"

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "../../components/Header";
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -20,6 +20,11 @@ export default function DashboardPage() {
             <p className="text-lg md:text-xl text-gray-600">
               Manage your life insurance recommendations and profile
             </p>
+            {user && (
+              <p className="text-sm text-gray-500 mt-2">
+                Welcome back, {user.name || user.email}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
