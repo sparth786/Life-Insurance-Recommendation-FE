@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { UserSubmission, RecommendationResponse } from "../types/insurance";
 import { insuranceApi } from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
+import Link from "next/link";
 
 export default function InsuranceForm() {
+  const { user, logout } = useAuth();
   const [formData, setFormData] = useState<UserSubmission>({
     age: 25,
     income: 5000,
@@ -44,16 +47,16 @@ export default function InsuranceForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Life Insurance Recommendation
-            </h1>
-            <p className="text-gray-600">
-              Get a personalized life insurance recommendation based on your
-              profile
+        <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8 border border-blue-100">
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              Get Your Personalized Recommendation
+            </h2>
+            <p className="text-gray-600 text-sm md:text-base">
+              Answer a few questions to receive a tailored life insurance
+              recommendation
             </p>
           </div>
 
@@ -75,7 +78,7 @@ export default function InsuranceForm() {
                 onChange={(e) =>
                   handleInputChange("age", Number(e.target.value))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
               />
             </div>
@@ -97,7 +100,7 @@ export default function InsuranceForm() {
                 onChange={(e) =>
                   handleInputChange("income", Number(e.target.value))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
               />
             </div>
@@ -119,7 +122,7 @@ export default function InsuranceForm() {
                 onChange={(e) =>
                   handleInputChange("dependents", Number(e.target.value))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
               />
             </div>
@@ -138,7 +141,7 @@ export default function InsuranceForm() {
                 onChange={(e) =>
                   handleInputChange("riskTolerance", e.target.value)
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
               >
                 <option value="Low">Low</option>
@@ -151,7 +154,7 @@ export default function InsuranceForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
               {loading ? "Generating Recommendation..." : "Get Recommendation"}
             </button>
@@ -159,14 +162,14 @@ export default function InsuranceForm() {
 
           {/* Error Message */}
           {error && (
-            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">
+            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-red-800">{error}</p>
             </div>
           )}
 
           {/* Recommendation Display */}
           {recommendation && (
-            <div className="mt-8 p-6 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mt-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
               <h2 className="text-xl font-semibold text-green-800 mb-4">
                 Your Personalized Recommendation
               </h2>
@@ -175,7 +178,7 @@ export default function InsuranceForm() {
                   <h3 className="text-lg font-medium text-green-700 mb-2">
                     Recommended Policy:
                   </h3>
-                  <p className="text-green-800 font-semibold">
+                  <p className="text-green-800 font-semibold text-lg">
                     {recommendation.recommendation}
                   </p>
                 </div>

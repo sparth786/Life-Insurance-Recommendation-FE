@@ -1,5 +1,5 @@
-import InsuranceForm from "../components/InsuranceForm";
+import AuthWrapper from "../components/AuthWrapper";
 
 export default function Home() {
-  return <InsuranceForm />;
+  return <AuthWrapper />;
 }
